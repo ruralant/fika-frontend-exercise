@@ -9,6 +9,18 @@ class MovieList extends Component {
     try {
       const movies = await fetchMovies();
       const genres = await fetchGenres();
+
+      let formattedMovies = {...movies};
+      formattedMovies = Object.values(formattedMovies);
+
+      formattedMovies.forEach(movie => {
+        const movieGenres = movie.genre_ids.map(genre => {
+          const genreString = genres.find(g => g.id === genre);
+          return genreString;
+        })
+        movie.genres = movieGenres;
+        delete movie.genre_ids;
+      });
     } catch (error) {
       console.log(error);
     }
