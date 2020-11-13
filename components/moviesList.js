@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, Text, FlatList, View, Image, ActivityIndicator } from 'react-native';
 import fetchMovies from '../api/movieApi';
 import fetchGenres from '../api/genresApi';
 
 class MovieList extends Component {
+  state = {
+    movies: [],
+    loading: true
+  }
 
   async componentDidMount() {
     try {
@@ -21,17 +25,40 @@ class MovieList extends Component {
         movie.genres = movieGenres;
         delete movie.genre_ids;
       });
+
+      this.setState({ movies: formattedMovies, loading: false });
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-    return(
-      <SafeAreaView>
-        <Text>I'm a movies list</Text>
-      </SafeAreaView>
-    )
+    const { movies, loading } = this.state;
+
+    const renderItem = ({ item }) => (
+      <Item title={item.title} imageUrl={item.poster_path} />
+    );
+
+    const Item = ({ title, imageUrl }) => (
+      <View>
+        <Image source={{uri: `https://image.tmdb.org/t/p/w500/${imageUrl}`}}/>
+        <Text>{title}</Text>
+      </View>
+    );
+
+    if(!loading) {
+      return (
+        <SafeAreaView>
+          <FlatList 
+            data={movies}
+            renderItem={renderItem}
+            keyExtractor={item => item.id} 
+            />
+        </SafeAreaView>
+      )
+    } else {
+        return <ActivityIndicator />
+    }
   }
 }
 
