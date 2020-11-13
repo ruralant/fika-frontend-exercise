@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, Text, FlatList, View, Image, ActivityIndicator } from 'react-native';
+import { styles } from '../styles/movieListStyle';
 import fetchMovies from '../api/movieApi';
 import fetchGenres from '../api/genresApi';
 
@@ -40,15 +41,15 @@ class MovieList extends Component {
     );
 
     const Item = ({ title, imageUrl }) => (
-      <View>
-        <Image source={{uri: `https://image.tmdb.org/t/p/w500/${imageUrl}`}}/>
-        <Text>{title}</Text>
+      <View style={styles.item}>
+        <Image source={{uri: `https://image.tmdb.org/t/p/w500/${imageUrl}`}} style={styles.movieImage}/>
+        <Text style={styles.title}>{title}</Text>
       </View>
     );
 
     if(!loading) {
       return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
           <FlatList 
             data={movies}
             renderItem={renderItem}
