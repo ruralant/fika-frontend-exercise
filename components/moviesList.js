@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import fetchMovies from '../api/movieApi';
+import fetchGenres from '../api/genresApi';
 
 class MovieList extends Component {
 
   async componentDidMount() {
-    const movies = await fetchMovies();
+    try {
+      const movies = await fetchMovies();
+      const genres = await fetchGenres();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
